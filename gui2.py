@@ -162,6 +162,28 @@ class CritTempPage(tk.Frame):
 	#	plt.xlabel('External Magnetic Field')
 	#	plt.show()
 
+
+		
+
+	def __init__(self, parent, controller):
+			tk.Frame.__init__(self, parent,height=800, width=1000)
+			label = ttk.Label(self, text="Critical Temperature Graph")
+			label.place(relx = 0.5, rely=0)
+			button1 = ttk.Button(self, text="Quit",
+								command=lambda: quit())
+			button1.place(relx = 0.2, rely=0.05)
+			button2 = ttk.Button(self, text="Hysteresis Page",
+                            command=lambda: controller.show_frame(HysteresisPage))
+			button2.place(relx = 0.4, rely=0.05)
+			button3 = ttk.Button(self, text="Ising Animation Page",
+								command=lambda: controller.show_frame(IsingAnimationPage))
+			button3.place(relx = 0.6, rely=0.05)
+
+			
+			
+			
+class HysteresisPage(tk.Frame):
+
 	def exponential_dict(self, magnetic, temp, coupling):
 		exp_dict = {}
 		spins = [-1,1]
@@ -229,30 +251,9 @@ class CritTempPage(tk.Frame):
 		plt.title('Magnetic Hysteresis Curve for J=1, T=1.5')
 		plt.ylabel('Average Magnetization')
 		plt.xlabel('External Magnetic Field')
-		plt.show()
-		
-
-	def __init__(self, parent, controller):
-			tk.Frame.__init__(self, parent,height=800, width=1000)
-			label = ttk.Label(self, text="Critical Temperature Graph")
-			label.place(relx = 0.5, rely=0)
-			button1 = ttk.Button(self, text="Quit",
-								command=lambda: quit())
-			button1.place(relx = 0.2, rely=0.05)
-			button2 = ttk.Button(self, text="Hysteresis Page",
-                            command=lambda: controller.show_frame(HysteresisPage))
-			button2.place(relx = 0.4, rely=0.05)
-			button3 = ttk.Button(self, text="Ising Animation Page",
-								command=lambda: controller.show_frame(IsingAnimationPage))
-			button3.place(relx = 0.6, rely=0.05)
-			button4 = ttk.Button(self, text="Create Critical Temperature Graph", command=self.create_graph)
-			button4.place(relx = 0.3, rely = 0.2)
-			#self.canvas = FigureCanvasTkAgg(fig,self)
-			self.canvas.get_tk_widget().place(relx=0.1, rely=0.35, relwidth=0.8)
-			canvas.draw()
-			
-			
-class HysteresisPage(tk.Frame):
+		canvas = FigureCanvasTkAgg(fig,self)
+		canvas.get_tk_widget().place(relx=0.1, rely=0.35, relwidth=0.8)
+		canvas.draw()
 
 	def __init__(self, parent, controller):
 			tk.Frame.__init__(self, parent,height=800, width=1000)
@@ -267,6 +268,8 @@ class HysteresisPage(tk.Frame):
 			button3 = ttk.Button(self, text="Ising Animation Page",
 								command=lambda: controller.show_frame(IsingAnimationPage))
 			button3.place(relx = 0.6, rely=0.05)
+			button4 = ttk.Button(self, text="Create Critical Temperature Graph", command=self.create_graph)
+			button4.place(relx = 0.3, rely = 0.2)			
 		
 ising = Ising()
 ising.mainloop()
