@@ -6,8 +6,8 @@ import matplotlib.animation as animation
 import random
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-ROWS = 100
-COLUMNS = 100
+ROWS = 150
+COLUMNS = 150
 
 ROWS1 = 30
 COLUMNS1 = 30
@@ -158,17 +158,17 @@ class CritTempPage(tk.Frame):
 					grid[i,j] = -1*grid[i,j]
 		return grid
 	
-	def critical_temperature(self):
-		temp = 1.0
+	def critical_temperature(self, coupling):
+		temp = 0.2
 		magnetic = 0
-		coupling = 1
+		#coupling = 1
 		temps = []
 		avgM = []
 		grid = self.random_grid_sized(ROWS1,COLUMNS1)
 		exp_dict = self.exponential_dict(magnetic, temp, coupling)
 		for k in range(1000):
 			self.spin_flip_all(grid, magnetic, coupling, temp, exp_dict)
-		for i in range(20):
+		for i in range(30):
 			temps.append(temp)
 			exp_dict = self.exponential_dict(magnetic, temp, coupling)		
 			for j in range(20):
@@ -179,10 +179,10 @@ class CritTempPage(tk.Frame):
 		
 	def crit_temp_graph(self):
 		fig = plt.figure()
-		temps, avgM = self.critical_temperature()
+		temps, avgM = self.critical_temperature(self.coupling_slider.get())
 		g = fig.add_subplot(111)
 		g.plot(temps, avgM)
-		plt.title('Temperature vs Average Magnetization')
+		plt.title('Temperature vs Average Magnetization with J= '+str(self.coupling_slider.get()))
 		plt.ylabel('Average Magnetization')
 		plt.xlabel('Temperature')
 		canvas = FigureCanvasTkAgg(fig,self)
@@ -190,6 +190,7 @@ class CritTempPage(tk.Frame):
 		canvas.draw()
 
 	def __init__(self, parent, controller):
+			coupling = 1
 			tk.Frame.__init__(self, parent,height=800, width=1000)
 			label = ttk.Label(self, text="Critical Temperature Graph")
 			label.place(relx = 0.5, rely=0)
@@ -201,6 +202,9 @@ class CritTempPage(tk.Frame):
 			button3.place(relx = 0.6, rely=0.05)
 			button4 = ttk.Button(self, text="Create Critical Temperature Graph", command=self.crit_temp_graph)
 			button4.place(relx = 0.4, rely = 0.3)
+			self.coupling_slider = tk.Scale(self, from_=-1.0, to=1.0,variable=coupling, resolution=0.1, orient=tk.HORIZONTAL, label="Coupling Constant", length=120, tickinterval=1.0, fg="purple")
+			self.coupling_slider.place(relx = 0.55, rely = 0.15)
+			self.coupling_slider.set(1.0)
 					
 class HysteresisPage(tk.Frame):
 
